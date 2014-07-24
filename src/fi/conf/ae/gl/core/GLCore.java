@@ -16,6 +16,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package fi.conf.ae.gl.core;
 
 import java.awt.Canvas;
+import java.awt.RenderingHints.Key;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -46,8 +47,8 @@ public abstract class GLCore {
 	public ListenerManager<GLMouseListener> mouseListeners;
 	
 	private GLMousePoint mousePoint;
-	public enum StereoMode { off, interlaced, oculus };
-	private StereoMode stereoMode;
+	public enum StereoMode { off, oculus };
+	private StereoMode stereoMode = StereoMode.off;
 	
 	private final static DrainableExecutorService drainableExecutorService = new DrainableExecutorService();
 	
@@ -105,9 +106,7 @@ public abstract class GLCore {
 //			}
 			
 			while (internalLoop()) {
-				// fps cap?
-				// fap cap?
-				// fap fap?
+				Display.sync(60);
 			}
 			glTerminate();
 		}
@@ -132,14 +131,7 @@ public abstract class GLCore {
 		
 		if (!glInit()) throw new Error("GL Initialization failed.");
 
-//	TÄä ei oo mun koodia t: tommi
-/*		new Timer(10, new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//if (!glLoop()
-			}
-		});
-*/
+		startGL();
 		
 	}
 	
@@ -278,14 +270,14 @@ public abstract class GLCore {
 			if (Keyboard.getEventKeyState() == true) {
 				// key changed to down
 				for (GLKeyboardListener listener : keyboardListeners) {
-					listener.glKeyDown(Keyboard.getEventKey());
+					listener.glKeyDown(Keyboard.getEventKey(), Keyboard.getEventCharacter());
 				}
 				
 			}
 			else {
 				// key changed to up
 				for (GLKeyboardListener listener : keyboardListeners) {
-					listener.glKeyUp(Keyboard.getEventKey());
+					listener.glKeyUp(Keyboard.getEventKey(), Keyboard.getEventCharacter());
 				}
 			}
 			
@@ -304,7 +296,8 @@ public abstract class GLCore {
 				// (Don't whine Tommi, it's just a matter of perspective!)
 				y = 1-y;
 				
-				mousePoint.getPoint2D().set(x*GLValues.glWidth, y*GLValues.glHeight);
+				mousePoint.getPointNormal2D().set(x, y);
+				mousePoint.getPointGL2D().set(x*GLValues.glWidth, y*GLValues.glHeight);
 				mousePoint.getDelta2D().set(Mouse.getDX(), Mouse.getDY());
 				
 				//Unproject 2D point to get the point in 3D space

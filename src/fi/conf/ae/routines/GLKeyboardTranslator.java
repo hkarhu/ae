@@ -44,6 +44,7 @@ public class GLKeyboardTranslator {
 		case KeyEvent.VK_B: return 'B';
 		case KeyEvent.VK_N: return 'N';
 		case KeyEvent.VK_M: return 'M';
+		case KeyEvent.VK_COLON: return ':';
 		case KeyEvent.VK_PERIOD: return '.';
 		case KeyEvent.VK_COMMA: return ',';
 		case KeyEvent.VK_EQUALS: return '=';

@@ -172,44 +172,46 @@ public class GLBitmapFontBlitter {
 	
 	public static void drawString(String string, String textureIdentifier, float charWidth, float charHeight, Alignment align) {
 		
-		float fix = 0;
-		float overlap = 0.01f;
+		float hOverlap = 0.01f;
+		float vOverlap = 0.0f;
+		
+		float xfix = 0;
 		
 		if(align.equals(Alignment.CENTERED)){
-			fix = string.length()*charWidth*0.5f;
+			xfix = string.length()*charWidth*0.5f;
 		} else if(align.equals(Alignment.RIGHT)){
-			fix = string.length()*charWidth-overlap;
+			xfix = string.length()*charWidth-hOverlap;
 		}
 		
 		GL11.glPushMatrix();
-		GL11.glTranslatef(0, -0.5f*charHeight,0);
-//		System.out.println(textureID);
-		GLTextureManager.getInstance().bindTexture(textureIdentifier);
-		
-		GL11.glBegin( GL11.GL_QUADS );	
-		
-		for(int i=0; i < string.length(); i++){
+			GL11.glTranslatef(0, -0.5f*charHeight,0);
 			
-			char c = string.charAt(i);
+			GLTextureManager.getInstance().bindTexture(textureIdentifier);
 			
-			float x1 = (c%16f)/16f;
-			float x2 = x1 + 1f/16f;
-			float y1 = (c/16)/16f;
-			float y2 = y1 + 1f/16f;
-
-			GL11.glTexCoord2d(x1+overlap,y1); GL11.glVertex3d(i*charWidth - fix,0,0);
-			GL11.glTexCoord2d(x1+overlap,y2); GL11.glVertex3d(i*charWidth - fix,charHeight,0);
-			GL11.glTexCoord2d(x2-overlap,y2); GL11.glVertex3d(i*charWidth+charWidth - fix,charHeight,0);
-			GL11.glTexCoord2d(x2-overlap,y1); GL11.glVertex3d(i*charWidth+charWidth - fix,0,0);
-
-		}
-		
-		GL11.glEnd();
+			GL11.glBegin( GL11.GL_QUADS );	
+			
+			for(int i=0; i < string.length(); i++){
+				
+				char c = string.charAt(i);
+				
+				float x1 = (c%16f)/16f;
+				float x2 = x1 + 1f/16f;
+				float y1 = (c/16)/16f;
+				float y2 = y1 + 1f/16f;
+	
+				GL11.glTexCoord2d(x1+hOverlap,y1+vOverlap); GL11.glVertex3d(i*charWidth - xfix,0,0);
+				GL11.glTexCoord2d(x1+hOverlap,y2-vOverlap); GL11.glVertex3d(i*charWidth - xfix,charHeight,0);
+				GL11.glTexCoord2d(x2-hOverlap,y2-vOverlap); GL11.glVertex3d(i*charWidth+charWidth - xfix,charHeight,0);
+				GL11.glTexCoord2d(x2-hOverlap,y1+vOverlap); GL11.glVertex3d(i*charWidth+charWidth - xfix,0,0);
+	
+			}
+			
+			GL11.glEnd();
 		GL11.glPopMatrix();
 		
 	}
 	
-	public static void blitScrollerString(String string, float charWidth, float charHeight, float freq, float amplitude, float phase, String font) {
+	public static void drawScrollerString(String string, float charWidth, float charHeight, float freq, float amplitude, float phase, String font) {
 
 		float overlap = 0.2f;
 
@@ -250,11 +252,8 @@ public class GLBitmapFontBlitter {
 		GL11.glPopMatrix();
 	}
 	
-	public static void blitSinString(String string, float charWidth, float charHeight, float freq, float amplitude, float phase, String font) {
-
-		float overlap = 0.2f;
-
-		float fix = 0;
+	
+	public static void drawCircleString(String string, float charHeight, float freq, float radius, float phase, String font) {
 
 		GL11.glPushMatrix();
 
@@ -271,21 +270,20 @@ public class GLBitmapFontBlitter {
 		for(int i=0; i < string.length(); i++){
 
 			char c = string.charAt(string.length()-1-i);
-			float vx1 = (float) Math.sin(phase+freq*2*Math.PI*i/string.length())*amplitude;
-			float vy1 = (float) Math.cos(phase+freq*2*Math.PI*i/string.length())*amplitude;
-			float vx2 = (float) Math.sin(phase+freq*2*Math.PI*i/string.length())*amplitude*charHeight;
-			float vy2 = (float) Math.cos(phase+freq*2*Math.PI*i/string.length())*amplitude*charHeight;
+			float vx1 = (float) Math.sin(phase+freq*2*Math.PI*i/string.length())*radius;
+			float vy1 = (float) Math.cos(phase+freq*2*Math.PI*i/string.length())*radius;
+			float vx2 = (float) Math.sin(phase+freq*2*Math.PI*i/string.length())*radius*charHeight;
+			float vy2 = (float) Math.cos(phase+freq*2*Math.PI*i/string.length())*radius*charHeight;
 
-			float vx3 = (float) Math.sin(phase+freq*2*Math.PI*(i+1)/string.length())*amplitude;
-			float vy3 = (float) Math.cos(phase+freq*2*Math.PI*(i+1)/string.length())*amplitude;
-			float vx4 = (float) Math.sin(phase+freq*2*Math.PI*(i+1)/string.length())*amplitude*charHeight;
-			float vy4 = (float) Math.cos(phase+freq*2*Math.PI*(i+1)/string.length())*amplitude*charHeight;
+			float vx3 = (float) Math.sin(phase+freq*2*Math.PI*(i+1)/string.length())*radius;
+			float vy3 = (float) Math.cos(phase+freq*2*Math.PI*(i+1)/string.length())*radius;
+			float vx4 = (float) Math.sin(phase+freq*2*Math.PI*(i+1)/string.length())*radius*charHeight;
+			float vy4 = (float) Math.cos(phase+freq*2*Math.PI*(i+1)/string.length())*radius*charHeight;
 			
 			float x1 = (c%16f)/16f;
 			float x2 = (c%16f)/16f + 1f/16f;
 			float y1 = (c/16)/16f;
 			float y2 = (c/16)/16f + 1f/16f;
-			
 			
 			//GL11.glColor3f((float)Math.random()*1.3f, (float)Math.random()*1.3f, (float)Math.random()*1.3f);
 			//GL11.glBindTexture(GL11.GL_TEXTURE_2D, -1);
@@ -298,7 +296,6 @@ public class GLBitmapFontBlitter {
 			
 		}
 
-		
 		GL11.glPopMatrix();
 	}
 	

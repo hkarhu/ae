@@ -224,5 +224,12 @@ public class GLGraphicRoutines {
 		GL11.glEnd();
 		
 	}
+
+	public static void drawLine(float x0, float y0, float x1, float y1, float z0, float z1, float lineWidth) {
+		GL11.glBegin(GL11.GL_LINES);
+			GL11.glVertex3f(x0, y0, z0);
+			GL11.glVertex3f(x1, y1, z1);
+		GL11.glEnd();
+	}
 	
 }

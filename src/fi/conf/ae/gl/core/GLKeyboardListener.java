@@ -20,12 +20,14 @@ import org.lwjgl.input.Keyboard;
 public interface GLKeyboardListener {
 
 	/**
+	 * @param c 
 	 * @see {@link Keyboard} for KEY_ events
 	 */
-	void glKeyDown(int eventKey);
+	void glKeyDown(int eventKey, char keyChar);
 	
 	/**
+	 * @param c 
 	 * @see {@link Keyboard} for KEY_ events
 	 */
-	void glKeyUp(int eventKey);
+	void glKeyUp(int eventKey, char keyChar);
 }

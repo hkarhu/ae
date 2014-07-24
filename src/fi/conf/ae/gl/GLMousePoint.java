@@ -20,22 +20,28 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class GLMousePoint{
 	
-	private Vector2f point2D;
+	private Vector2f pointGL2D;
+	private Vector2f pointNormal2D;
 	private Vector2f delta2D;
 	private Vector3f point3D;
 	
 	public GLMousePoint() {
-		this(new Vector2f(), new Vector2f(), new Vector3f());
+		this(new Vector2f(), new Vector2f(), new Vector3f(), new Vector2f());
 	}
 	
-	public GLMousePoint(Vector2f point2D, Vector2f delta2D, Vector3f point3D) {
-		this.point2D = point2D;
+	public GLMousePoint(Vector2f pointGL2D, Vector2f delta2D, Vector3f point3D, Vector2f pointNormal2D) {
+		this.pointGL2D = pointGL2D;
+		this.pointNormal2D = pointNormal2D;
 		this.delta2D = delta2D;
 		this.point3D = point3D;
 	}
 
-	public Vector2f getPoint2D() {
-		return point2D;
+	public Vector2f getPointNormal2D() {
+		return pointNormal2D;
+	}
+	
+	public Vector2f getPointGL2D() {
+		return pointGL2D;
 	}
 	
 	public Vector2f getDelta2D() {
