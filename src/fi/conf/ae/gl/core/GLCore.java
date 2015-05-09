@@ -78,7 +78,7 @@ public abstract class GLCore {
 		startGL(windowTitle);
 	}
 	
-	public void startGL(String title, StereoMode stereoMode, ByteBuffer[] icon) {
+	public void startGL(String title, ByteBuffer[] icon, StereoMode stereoMode) {
 		this.stereoMode = stereoMode;
 		startGL(windowTitle, icon);
 	}
