@@ -153,6 +153,19 @@ public class GLGraphicRoutines {
 		
 	}
 	
+	public static void drawHexagon(float r){
+		GL11.glBegin( GL11.GL_TRIANGLE_FAN );
+		
+		for(float a=(float) ((2.0f*Math.PI)/6.0f); a < 2*Math.PI; a += (2.0f*Math.PI)/6.0f){
+			
+			GL11.glNormal3f(0, 0, -1.0f);
+			GL11.glTexCoord2d((Math.sin(a)+1.0f)/2.0f, (Math.cos(a)+1.0f)/2.0f);
+			GL11.glVertex3d(Math.sin(a)*r, Math.cos(a)*r, 0);
+			
+		}
+		GL11.glEnd();
+	}
+	
 	public static void drawLineCircle(float radius, float segments, float lineWidth) {
 		
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, -1);
@@ -226,6 +239,7 @@ public class GLGraphicRoutines {
 	}
 
 	public static void drawLine(float x0, float y0, float x1, float y1, float z0, float z1, float lineWidth) {
+		GL11.glLineWidth(lineWidth);
 		GL11.glBegin(GL11.GL_LINES);
 			GL11.glVertex3f(x0, y0, z0);
 			GL11.glVertex3f(x1, y1, z1);

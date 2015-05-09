@@ -61,7 +61,6 @@ public abstract class GLCore {
 		
 		keyboardListeners = new ListenerManager<>();
 		mouseListeners = new ListenerManager<>();
-		
 		mousePoint = new GLMousePoint();
 	}
 	
@@ -98,15 +97,15 @@ public abstract class GLCore {
 		if (glInit()) {
 			
 			//Do stereo mode-init if any
-//			switch(stereoMode){
+			switch(stereoMode){
 //			
 //				case interlaced: interlacedStereoInit(); break;
-//				case oculus: oculusStereoInit(); break;
+				case oculus: oculusStereoInit(); break;
 //					
-//			}
+			}
 			
 			while (internalLoop()) {
-				Display.sync(60);
+				sleep(33);
 			}
 			glTerminate();
 		}
@@ -235,7 +234,9 @@ public abstract class GLCore {
 //			default: glLoop(); swapBuffers(); break;
 //		}
 		
-		 glLoop(); swapBuffers();
+		glLoop();
+		
+		swapBuffers();
 		
 		Display.processMessages();
 
